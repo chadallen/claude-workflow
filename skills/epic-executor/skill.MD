@@ -1,7 +1,7 @@
 ---
 name: epic-executor
 description: Autonomously execute all tasks in a beads epic using fresh subagents per task with two-stage review (spec compliance + code quality). Resumable across sessions. Invoked by the user to run a beads epic to completion.
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Bash, Read
 ---
 

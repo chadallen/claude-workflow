@@ -47,17 +47,29 @@ Print for the user:
 1. **Last session recap** — 2-3 sentences from plan.MD's most recent Current Status entry.
 2. **Active epic status** — If there's an active epic noted in plan.MD: count of open/in_progress/closed tasks. Example: "`enzo-12` (Phase 6): 2 closed, 1 in progress, 4 open."
 3. **Next ready task(s)** — Top 1-3 tasks from `bd ready`, each with ID and title.
-4. **Proposed focus** — What you recommend working on this session. Default to the highest-priority ready task. If the remaining tasks in the active epic are well-specified, mention that `/epic-executor <epic-id>` could run them autonomously.
+4. **Proposed focus** — What you recommend working on this session. Default to the highest-priority ready task.
 5. **Missing ADRs** — If Step 3 found any undocumented architectural decisions from recent sessions, list them here. Offer to create them before starting new work.
 6. **Blockers or questions** — Anything from plan.MD's Known Issues, from `bd blocked`, or anything ambiguous where you want clarification before starting.
 7. **Estimated scope** — Rough sense of how much fits in this session.
 
-## Step 6: Wait
+## Step 6: Offer a workflow
 
-Do NOT proceed until the user approves the plan, modifies it, or gives a different direction. Do not write code until you have explicit approval.
+After presenting the plan, explicitly ask the user which mode they want:
 
-Once approved:
+> **How would you like to work this session?**
+> - **A) `/epic-executor <epic-id>`** — Autonomous: implement all ready tasks in the active epic, with code review after each task. Best when tasks are well-specified and don't need real-time design decisions.
+> - **B) `/plan-to-epic`** — Planning: design a new feature and break it into tasks before starting. Best when the next thing to build isn't yet in beads.
+> - **C) Manual** — Work tasks one at a time with your guidance. Best for UI work, tasks needing live decisions, or when you want to stay hands-on.
 
-- Claim the task: `bd update <task-id> --claim --json`
+Wait for the user to choose before proceeding.
+
+## Step 7: Execute chosen workflow
+
+**If A (epic-executor):** Invoke `/epic-executor <epic-id>`. Do not claim tasks or write code yourself — the executor handles it.
+
+**If B (plan-to-epic):** Invoke `/plan-to-epic`. Do not start any implementation — planning comes first.
+
+**If C (manual):**
+- Claim the first task: `bd update <task-id> --claim --json`
 - Begin work.
 - Commit frequently with the issue ID in parens: `git commit -m "Add X (<task-id>)"`. This enables orphan detection at session end.
