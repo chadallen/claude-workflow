@@ -1,0 +1,25 @@
+# Ignore everything by default
+*
+
+# Root
+!.gitignore
+!README.md
+
+# Skills (whitelist)
+!skills/
+!skills/ADR/
+!skills/ADR/**
+!skills/end-session/
+!skills/end-session/**
+!skills/epic-executor/
+!skills/epic-executor/**
+!skills/migrate/
+!skills/migrate/**
+!skills/plan-to-epic/
+!skills/plan-to-epic/**
+!skills/start-session/
+!skills/start-session/**
+
+# Agents (whitelist)
+!agents/
+!agents/code-reviewer.MD
