@@ -1,145 +1,171 @@
 # AI Coding Workflow: Planning Docs + ADR + Beads
 
-let's create the world of autonomous vibe coding agents we deserve. and/or melt the polar ice caps with the heat of a thousand data centers. but fist these little dudes need us to fix their amnesia and ADHD problems. 
+let's create the world of autonomous vibe coding agents we deserve. but first these little dudes need us to fix their amnesia and ADHD problems.
 
-amnesia: agents need us to write down what we want and they need skills to turn this into a plan with bite-sized chunks of work that they can persist across sessions. 
+**amnesia:** agents forget everything between sessions. we write things down so they don't have to start from scratch every time.
 
-ADHD: agents need a task list and a clear set of instructions on how to work through it so they don't get sidetracked by random ideas they have. focus, agents, focus!
+**ADHD:** agents get distracted and go off on tangents. we give them a task list and a clear process so they stay focused.
+
+this repo is the fix. a handful of markdown files, a task tracker, and some skills that wire it all together.
 
 ## The Pieces
 
-**CLAUDE.md** — put the usual stuff here. don't change it frequentky. maybe just let the agents worry about it. 
+**CLAUDE.md** — the usual stuff. stack, conventions, hard rules. keep it short. agents will help maintain it.
 
-**PRD.md** — product managers take a moment to silently reflect on this: agents are the only developers who have ever read your PRD front to back. even they will grow weary, so when something in this doc becomes working software the agents will replace your prose with a code pointer. 
+**PRD.md** — product managers take a moment to silently reflect: agents are the only developers who have ever read your PRD front to back. even they grow weary, so when something in this doc becomes working software they'll replace your prose with a code pointer.
 
-**plan.MD** — agents love making plans more than following them. this doc provides the big picture approach for building your thing. it gets updated every session. the detailed session-level plans are in beads (below).
+**plan.MD** — the big picture. phases, what's active, what's next. agents update it every session. the detailed task-level stuff lives in beads.
 
-**`docs/adr/`** — Architecture Decision Records. "don't forget why we decided to use Python instead of PHP." these are short but curtail the idle speculation of idle agents about what might have been. 
+**`docs/adr/`** — Architecture Decision Records. short notes on why we made the choices we did. curtails the idle speculation of idle agents about what might have been.
 
-**`docs/plans/`** — design docs, one per epic.  helps keep context windows under control: each beads task gets only the relevant details dumped to its `design` field — subagents never read the design doc directly.
+**[Beads](https://github.com/steveyegge/beads)** — task tracker for AI agents, built by Yegge in a fugue state. tasks have description, design, acceptance criteria, and notes fields. epics group tasks. dependencies are tracked, so `bd ready` only surfaces work that's actually unblocked.
 
-**[Beads](https://github.com/steveyegge/beads)** — task tracker for AI agents built by Yegge in a fugue state. epics group tasks. dependencies are tracked.
+`bd setup claude` installs hooks that auto-inject task state at session start. commits include the task ID (`git commit -m "fix login (bd-42)"`) so `bd doctor` can catch work that got committed but never closed.
 
 ## The Skills
 
 | Skill | When |
 |---|---|
-| `/start-session` | Beginning of a session. Reads docs and beads, flags missing ADRs, proposes a plan. |
-| `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
-| `/plan-to-epic` | Writes a design doc, waits for review, then creates a beads epic with per-task context slices extracted from the design. |
-| `/epic-executor` | Autonomously executes all tasks in an epic. Comprehensive code review after each task. |
-| `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
-| `/migrate` | One-time setup for any project. Constructs docs if needed, skips what already exists. |
+| `/init-project` | brand new project. reads your PRD, creates CLAUDE.md and plan.MD, inits beads. |
+| `/start-session` | beginning of a session. reads docs and beads, flags missing ADRs, proposes a plan. |
+| `/end-session` | end of a session. closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
+| `/create-beads` | turns a conversation into tasks. writes a proposal for you to review, creates on approval. |
+| `/build-beads` | autonomously builds tasks with code review after each one. you can walk away. |
+| `/adr` | creates an Architecture Decision Record. usually invoked by other skills, not directly. |
+| `/migrate` | one-time setup for existing projects. cleans up docs, inits beads, imports tasks. |
+
+## First Time Setup (if you're new to this)
+
+advanced users skip to [Getting Started](#getting-started).
+
+### what you need
+
+- a **Claude Pro or Max subscription** ($20–200/month at [claude.ai](https://claude.ai)). the free plan doesn't include Claude Code.
+- a **terminal** — Terminal.app on macOS, any terminal on Linux. on Windows, install [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) and use the Ubuntu terminal.
+- **git** — already there on macOS and most Linux systems. check with `git --version`.
+
+### 1. install Claude Code
+
+**macOS / Linux:**
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+open a new terminal after it finishes. verify:
+
+```bash
+claude --version
+```
+
+first time you run `claude` it opens a browser to sign in to your Anthropic account. follow the prompts.
+
+**Windows:** use WSL (Ubuntu) and run the command above inside the Ubuntu terminal.
+
+### 2. install beads
+
+```bash
+brew install beads      # macOS
+```
+
+Linux: see [beads installation](https://github.com/steveyegge/beads) for your distro. verify with `bd version`.
+
+### 3. install the skills
+
+```bash
+mkdir -p ~/.claude/skills ~/.claude/agents
+
+cp -r path/to/this-repo/skills/* ~/.claude/skills/
+cp path/to/this-repo/agents/code-reviewer.md ~/.claude/agents/
+```
+
+### 3a. linters (install when you need them)
+
+the repo includes configs for Python (Ruff), TypeScript/JavaScript (ESLint), and Swift (SwiftLint). you don't need to install them upfront — the code reviewer will tell you if one is missing when it runs.
+
+### 4. start a new project
+
+```bash
+mkdir my-project && cd my-project
+git init
+claude
+```
+
+add your `PRD.md` to the folder, then:
+
+```
+/init-project
+```
+
+the skill reads your PRD, asks a few quick questions about your stack, creates CLAUDE.md and plan.MD, inits beads, and installs hooks. when it's done it tells you how to create your first tasks.
+
+---
 
 ## Getting Started
 
-### 1. Install the tools
-
-Install [beads](https://github.com/steveyegge/beads) — a Go binary, installs in seconds:
-
-```bash
-brew install beads   # macOS
-# or see beads docs for other platforms
-```
-
-you also need [Claude Code](https://claude.ai/code) with a Pro or Max subscription. are you even alive otherwise?
-
-### 2. Install the skills
-
-clone or download this repo. copy the skill folders to your Claude skills directory. or don't? I dunnno. 
-
-```bash
-# Personal (available across all projects)
-cp -r skills/start-session skills/end-session skills/plan-to-epic \
-      skills/epic-executor skills/adr skills/migrate \
-      ~/.claude/skills/
-
-# Code reviewer subagent
-cp agents/code-reviewer.md ~/.claude/agents/
-```
-
-or do it per-project if you're not feeling lucky:
-
-```bash
-cp -r skills/* .claude/skills/
-cp agents/code-reviewer.md .claude/agents/
-```
-
-### 3. Set up your project
-
-don't wait for your next project to live the dream. we made a migrate skill for you. 
-
-In Claude Code, run:
-
-```
-/migrate
-```
-
-it tries to sort through the crap in your project, nukes some of it, writes new stuff, initializes beads, installs hooks, and imports any existing tasks. for projects like yours with sparse docs it'll ask you a few questions first to avoid reading all the code.
+already set up? existing project? run `/migrate` instead of `/init-project`. it detects what exists, cleans up what needs cleaning, and adds what's missing.
 
 ---
 
 ## How to Use
 
-### Starting a session
-
-in the beginning was:
+### starting a session
 
 ```
 /start-session
 ```
 
-agent reads your docs and beads state, surfaces the next ready task, flags any unrecorded architectural decisions from last session, and proposes a plan. you adjust or YOLO. sub agents spawn and swarm.
+agent reads docs and beads state, surfaces the next ready task, flags any unrecorded architectural decisions from last session, proposes a plan. you approve or adjust.
 
-### Ending a session
-
-At the end of every session:
+### ending a session
 
 ```
 /end-session
 ```
 
-closes completed beads tasks, checks for ADR-worthy decisions made during the session, updates CLAUDE.md/PRD.md/plan.MD, commits and pushes everything. session isn't done until `git push` and `bd sync` both succeed.
+closes completed tasks, checks for ADR-worthy decisions, updates the docs, commits and pushes everything. session isn't done until `git push` and `bd sync` both succeed. prompts you to run `/clear` when done.
 
-### Planning a new feature (autonomous mode)
+### breaking work into tasks
 
-When you have a feature to build:
-
-```
-/plan-to-epic
-```
-
-Brainstorm with the agent in chat first. When the design is clear, this skill writes a design doc to `docs/plans/`, shows you the proposed task list with dependencies, and waits for your approval. Once you confirm, it creates the beads epic with per-task context already extracted from the design. Then:
+brainstorm with the agent in chat first. when the shape of the work is clear:
 
 ```
-/epic-executor <epic-id>
+/create-beads
 ```
 
-The agent implements each task with a fresh subagent, runs a comprehensive code review after each one (tests, linting, security, performance, simplification), fixes issues, closes the task, and moves to the next. You can walk away. Resume any time with `continue epic <epic-id>`.
+agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, acceptance criteria, and dependencies. edit the file directly. reorder, rescope, delete what you don't want. reply when ready and it creates the beads.
 
-### Working task by task (conversational mode)
-
-For UI work, learning-heavy tasks, or anything needing real-time feedback, skip the executor and work one task at a time:
+### building tasks autonomously
 
 ```
-/start-session        # see what's next
+/build-beads <epic-id>      # all tasks in an epic
+/build-beads <task-id>      # one specific task
+/build-beads                # next ready task
+```
+
+fresh subagent per task, comprehensive code review after each one (tests, linting, security, performance, simplification), fixes issues, closes task, moves on. you can walk away. resumes where it left off.
+
+### working task by task (conversational mode)
+
+for UI work or anything that needs real-time judgment:
+
+```
+/start-session    # see what's next
 # work the task
-/end-session          # close it out
+/end-session      # close it out
 ```
 
-### Recording an architectural decision
+### recording an architectural decision
 
-The agent handles this automatically at session end, but you can trigger it directly:
+the agent does this automatically at session end. but you can also just:
 
 ```
 /adr
 ```
 
-The agent proposes a title and one-line summary, waits for your confirm, then writes the ADR to `docs/adr/`. It won't write one without asking first.
+proposes a title and summary, waits for your confirm, writes the ADR to `docs/adr/`. won't write one without asking.
 
-### Checking what's next
-
-Without starting a full session:
+### checking what's next without a full session
 
 ```bash
 bd ready              # next unblocked tasks
@@ -149,4 +175,4 @@ bd stats              # project overview
 
 ---
 
-`/plan-to-epic` and `/epic-executor` are adapted from [Jarred Kenny's beads workflow](https://jx0.ca/solving-agent-context-loss/).
+`/create-beads` and `/build-beads` are adapted from [Jarred Kenny's beads workflow](https://jx0.ca/solving-agent-context-loss/).
