@@ -1,11 +1,14 @@
 ---
 name: end-session
-description: End-of-session cleanup including beads issue management, documentation updates, and mandatory push to remote. Use whenever the user says "end session", "wrap up", "done for now", "let's stop here", "close out", "land the plane", or types /end-session.
+description: Closes completed beads tasks, checks for ADR-worthy decisions, updates CLAUDE.md/PRD.md/plan.MD, commits all changes, and pushes to remote. Session is not complete until git push and bd sync both succeed.
+when_to_use: Use at the end of every coding session. Trigger phrases: "end session", "wrap up", "done for now", "let's stop here", "land the plane", "/end-session".
+disable-model-invocation: true
+allowed-tools: Bash, Read, Write
 ---
 
 # End Session
 
-Run this procedure exactly. Do NOT write any project code during this procedure. The session is NOT done until the final `git push` and `bd dolt push` succeed.
+Run this procedure exactly. Do NOT write any project code during this procedure. The session is NOT done until the final `git push` and `bd sync` succeed.
 
 ## Step 1: Close completed beads issues
 
@@ -23,11 +26,7 @@ Never leave a task `in_progress` just because the session ended without deciding
 
 ## Step 2: Check for orphans
 
-Run `bd doctor` to detect orphaned issues — work committed but not closed.
-
-Note: `bd doctor` is not supported in embedded mode (the default). If it prints "not yet supported in embedded mode", skip this step — no action needed.
-
-For any orphans found:
+Run `bd doctor` to detect orphaned issues — work committed but not closed. For any found:
 
 - If actually done, close it.
 - If work is incomplete, file a follow-up task with `bd create`.
@@ -44,11 +43,30 @@ Read CLAUDE.md, PRD.md, and plan.MD in full.
 
 ## Step 5: Update CLAUDE.md (if needed)
 
-Update only if this session changed project-level rules, conventions, tooling, or dependencies.
+Update only if this session changed project-level rules, conventions, tooling, or dependencies. If nothing changed, leave it alone.
 
-CLAUDE.md must not contain progress tracking, session history, or task lists — those live in plan.MD and beads.
+**What justifies a CLAUDE.md edit:**
+- New command Claude needs to know (added a lint step, changed the test runner)
+- New hard rule discovered (new secret, new data constraint)
+- New gotcha that will bite future sessions (add to "Things That Will Bite You" if the section exists; create one if it doesn't)
+- Removed or renamed something CLAUDE.md references
 
-If nothing changed, leave it alone.
+**What does NOT go in CLAUDE.md:**
+- Progress tracking, session history, task lists → plan.MD
+- Accumulated gotchas that are task-adjacent but not universal → plan.MD Build Notes
+- Architecture decisions → `docs/adr/`
+- Feature-level design → `docs/plans/`
+- Code style rules → linter config
+
+**Before adding anything, apply the cost test:**
+- Would removing this cause Claude to make a mistake? If not, don't add it.
+- Is this universally applicable to every session? If it's only relevant sometimes, put it in a skill file and reference it with `@path`.
+- Is there already a line that says something similar? Consolidate rather than duplicate.
+
+**Style rules:**
+- "Don't X, do Y" — never leave a prohibition without a concrete alternative
+- Keep the file under 80 lines. If it's creeping up, split content into skills or ADRs.
+- Reserve emphasis (IMPORTANT, YOU MUST) for 2-3 rules that truly matter
 
 ## Step 6: Update and prune PRD.md (if needed)
 
@@ -104,7 +122,7 @@ Commit: `docs: end-of-session update — <brief summary>`. Include any task IDs 
 1. `git pull --rebase` — pull any remote changes first.
 2. `git push` — push everything.
 3. `git status` — must show "up to date with origin/<branch>".
-4. `bd dolt push` — sync beads data to remote. (`bd sync` does not exist — use `bd dolt push`.)
+4. `bd sync` — sync beads data to git (Dolt commit + push).
 5. If any step fails, resolve the issue and retry. Do not give up.
 
 Do NOT end the session with unpushed work. Do NOT tell the user "ready to push when you are." Push it yourself.
@@ -119,4 +137,4 @@ Print for the user:
 - Any items needing user attention (manual testing, decisions, external dependencies).
 - Confirmation that everything is pushed and the working tree is clean.
 
-Then prompt: **"Run `/clear` to reset the conversation context before your next session."**
+Then prompt: **"Session complete. Run `/clear` to reset the context window before your next session."**

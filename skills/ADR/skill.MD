@@ -1,6 +1,7 @@
 ---
 name: adr
-description: Creates and manages Architecture Decision Records in docs/adr/. Invoked automatically by end-session, start-session, and migration skills when architectural decisions are detected. Can also be invoked directly with /adr.
+description: Creates and manages Architecture Decision Records in docs/adr/. Proposes a title and one-sentence summary before writing anything. Invoked automatically by end-session and migrate when architectural decisions are detected.
+when_to_use: Use when an architectural decision was made between multiple viable options that affects future code structure and would be non-obvious from the code alone. Trigger phrases: "record this decision", "write an ADR", "document this architecture choice", "/adr".
 allowed-tools: Bash, Read, Write
 ---
 
@@ -88,7 +89,7 @@ This preserves the full history of why things changed.
 
 ## Batch creation (used by migrations)
 
-When called by `/migrate-to-beads`, `/full-migration`, or similar, you may need to create multiple ADRs for existing decisions. In this case:
+When called by `/migrate` or similar, you may need to create multiple ADRs for existing decisions. In this case:
 
 1. Scan existing docs (CLAUDE.md, PRD.md, README, etc.) for past decisions that meet the criteria.
 2. Propose all of them as a batch — show the list of titles.

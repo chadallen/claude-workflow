@@ -1,6 +1,9 @@
 ---
 name: start-session
-description: Start-of-session orientation for projects using beads for task tracking. Reads CLAUDE.md, PRD.md, plan.MD, and beads state to propose a session plan. Use whenever the user says "start session", "let's get started", "pick up where we left off", "new session", "what's next", or types /start-session.
+description: Reads CLAUDE.md, PRD.md, plan.MD, and beads state to orient the agent at the start of a coding session. Flags missing ADRs, surfaces ready tasks, and proposes a session plan for user approval.
+when_to_use: Use at the beginning of every coding session. Trigger phrases: "start session", "let's get started", "pick up where we left off", "new session", "what's next", "/start-session".
+disable-model-invocation: true
+allowed-tools: Bash, Read
 ---
 
 # Start Session
@@ -24,7 +27,7 @@ CLAUDE.md is already auto-loaded. Read:
 - **plan.MD** — Session history and active epic. Read in full.
 - **PRD.md** — Product requirements. Read in full.
 
-If plan.MD doesn't exist, stop. This project hasn't been set up for this workflow yet — suggest running `/migrate-to-beads`.
+If plan.MD doesn't exist, stop. This project hasn't been set up for this workflow yet — suggest running `/migrate`.
 
 ## Step 3: Scan for missing ADRs
 
@@ -38,7 +41,7 @@ If `bd prime` already ran via hook, you have most of this. Otherwise run:
 - `bd blocked --json` — blocked tasks
 - If plan.MD notes an active epic, run `bd list --parent <epic-id> --json` to see all tasks in the epic and their status
 
-If `.beads/` doesn't exist, stop. Suggest running `/migrate-to-beads`.
+If `.beads/` doesn't exist, stop. Suggest running `/migrate`.
 
 ## Step 5: Present the session plan
 
@@ -47,29 +50,17 @@ Print for the user:
 1. **Last session recap** — 2-3 sentences from plan.MD's most recent Current Status entry.
 2. **Active epic status** — If there's an active epic noted in plan.MD: count of open/in_progress/closed tasks. Example: "`enzo-12` (Phase 6): 2 closed, 1 in progress, 4 open."
 3. **Next ready task(s)** — Top 1-3 tasks from `bd ready`, each with ID and title.
-4. **Proposed focus** — What you recommend working on this session. Default to the highest-priority ready task.
+4. **Proposed focus** — What you recommend working on this session. Default to the highest-priority ready task. If the remaining tasks in the active epic are well-specified, mention that `/build-beads <epic-id>` could run them autonomously.
 5. **Missing ADRs** — If Step 3 found any undocumented architectural decisions from recent sessions, list them here. Offer to create them before starting new work.
 6. **Blockers or questions** — Anything from plan.MD's Known Issues, from `bd blocked`, or anything ambiguous where you want clarification before starting.
 7. **Estimated scope** — Rough sense of how much fits in this session.
 
-## Step 6: Offer a workflow
+## Step 6: Wait
 
-After presenting the plan, explicitly ask the user which mode they want:
+Do NOT proceed until the user approves the plan, modifies it, or gives a different direction. Do not write code until you have explicit approval.
 
-> **How would you like to work this session?**
-> - **A) `/epic-executor <epic-id>`** — Autonomous: implement all ready tasks in the active epic, with code review after each task. Best when tasks are well-specified and don't need real-time design decisions.
-> - **B) `/plan-to-epic`** — Planning: design a new feature and break it into tasks before starting. Best when the next thing to build isn't yet in beads.
-> - **C) Manual** — Work tasks one at a time with your guidance. Best for UI work, tasks needing live decisions, or when you want to stay hands-on.
+Once approved:
 
-Wait for the user to choose before proceeding.
-
-## Step 7: Execute chosen workflow
-
-**If A (epic-executor):** Invoke `/epic-executor <epic-id>`. Do not claim tasks or write code yourself — the executor handles it.
-
-**If B (plan-to-epic):** Invoke `/plan-to-epic`. Do not start any implementation — planning comes first.
-
-**If C (manual):**
-- Claim the first task: `bd update <task-id> --claim --json`
+- Claim the task: `bd update <task-id> --claim --json`
 - Begin work.
 - Commit frequently with the issue ID in parens: `git commit -m "Add X (<task-id>)"`. This enables orphan detection at session end.
