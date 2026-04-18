@@ -140,6 +140,9 @@ language-specific checklist below in addition to the general checks.
 - Swift concurrency — improper async/await usage, missing actor isolation
 - SwiftUI state management — @State/@Binding used where @StateObject/@ObservedObject is needed, or vice versa
 
+Note: This agent covers correctness and patterns. Deeper Swift/iOS design review is
+available via dedicated skills — reference them in your output (see output format).
+
 **TypeScript/JavaScript additional checks:**
 - Unsafe type casts (as any, as unknown as X) — flag each; note if intentional per codebase pattern
 - Missing error handling in async functions (unhandled promise rejections)
@@ -241,6 +244,12 @@ Tests (N passed), Linter (clean), [other clean agents...]
 
 ### Verdict: [APPROVED | NEEDS_CHANGES]
 One sentence on what to do next.
+
+### Further Review (Swift/iOS only — omit for other languages)
+This review covers correctness, linting, and code quality. For deeper Swift/iOS analysis:
+- `/swift-patterns` — Swift idioms, architecture patterns, protocol design
+- `/swift-design` — SwiftUI component design, layout, view composition
+- `/ios-ux-design` — iOS UX patterns, Human Interface Guidelines, interaction design
 ```
 
 ### Verdict Guidelines
