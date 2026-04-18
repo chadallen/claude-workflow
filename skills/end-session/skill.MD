@@ -118,3 +118,5 @@ Print for the user:
 - Top priority for next session (reference the next ready task by ID).
 - Any items needing user attention (manual testing, decisions, external dependencies).
 - Confirmation that everything is pushed and the working tree is clean.
+
+Then prompt: **"Run `/clear` to reset the conversation context before your next session."**
