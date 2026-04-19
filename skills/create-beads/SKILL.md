@@ -143,7 +143,7 @@ Commit:
 ```bash
 git add .beads/ plan.MD
 git commit -m "feat: create [epic/tasks] for <work summary>"
-bd sync
+bd dolt push
 ```
 
 ---

@@ -1,6 +1,6 @@
 ---
 name: end-session
-description: Closes completed beads tasks, checks for ADR-worthy decisions, updates CLAUDE.md/PRD.md/plan.MD, commits all changes, and pushes to remote. Session is not complete until git push and bd sync both succeed.
+description: Closes completed beads tasks, checks for ADR-worthy decisions, updates CLAUDE.md/PRD.md/plan.MD, commits all changes, and pushes to remote. Session is not complete until git push and bd dolt push both succeed.
 when_to_use: Use at the end of every coding session. Trigger phrases: "end session", "wrap up", "done for now", "let's stop here", "land the plane", "/end-session".
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write
@@ -8,7 +8,7 @@ allowed-tools: Bash, Read, Write
 
 # End Session
 
-Run this procedure exactly. Do NOT write any project code during this procedure. The session is NOT done until the final `git push` and `bd sync` succeed.
+Run this procedure exactly. Do NOT write any project code during this procedure. The session is NOT done until the final `git push` and `bd dolt push` succeed.
 
 ## Step 1: Close completed beads issues
 
@@ -121,7 +121,7 @@ Commit: `docs: end-of-session update — <brief summary>`. Include any task IDs 
 1. `git pull --rebase` — pull any remote changes first.
 2. `git push` — push everything.
 3. `git status` — must show "up to date with origin/<branch>".
-4. `bd sync` — sync beads data to git (Dolt commit + push).
+4. `bd dolt push` — push beads data to remote.
 5. If any step fails, resolve the issue and retry. Do not give up.
 
 Do NOT end the session with unpushed work. Do NOT tell the user "ready to push when you are." Push it yourself.

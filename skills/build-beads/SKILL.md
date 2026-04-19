@@ -144,7 +144,7 @@ Return to 3.1.
 When the loop finishes (all epic tasks closed, task list exhausted, or single task done):
 
 ```bash
-bd sync
+bd dolt push
 ```
 
 Print: what was built, tasks closed this run, commits pushed. Suggest `/end-session`.
@@ -154,7 +154,7 @@ Print: what was built, tasks closed this run, commits pushed. Suggest `/end-sess
 If the loop stops before completion:
 
 - Revert any `in_progress` task to `open` with notes, OR leave `in_progress` with explanation.
-- Run `bd sync`.
+- Run `bd dolt push`.
 - Print what was completed, what stopped the loop, what the user should do next.
 
 Do NOT leave any task in an ambiguous state.
