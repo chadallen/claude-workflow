@@ -4,11 +4,26 @@ Let's create the world of autonomous vibe coding agents we deserve so that AI ca
 
 I made this for myself. Claude describes it below using many words that you can read if that's your thing. Or just try it:
 
-Install the skills once (see [First time setup](#first-time-setup-if-youre-new-to-this) below), then:
+Clone this repo into your project folder and go:
 
-1. For an existing project: open it in Claude Code and invoke `/migrate-project`.
+```bash
+git clone https://github.com/chadallen/claude-workflow.git my-project
+cd my-project && claude
+```
 
-2. For a new project: create a folder, add your `PRD.md`, open it in Claude Code, and invoke `/init-project`. The basic workflow from there is `start-session` → `create-beads` → `build-beads` → `end-session`. Don't know what Beads are? Whatever, man.
+The skills live in `.claude/skills/` and are picked up automatically by Claude Code. No copying required.
+
+1. For a new project: add your `PRD.md` and invoke `/init-project`.
+2. For an existing project: invoke `/migrate-project`.
+
+The basic workflow is `start-session` → `create-beads` → `build-beads` → `end-session`. Don't know what Beads are? Whatever, man.
+
+> **Want these skills available in all your projects?** Copy them to your global Claude config once:
+> ```bash
+> cp -r .claude/skills/* ~/.claude/skills/
+> cp .claude/agents/code-reviewer.MD ~/.claude/agents/
+> ```
+> After that you don't need to clone this repo into each project.
 
 # The long version 
 
@@ -73,19 +88,21 @@ brew install beads      # macOS
 
 Linux: See [beads installation](https://github.com/steveyegge/beads) for your distro. Verify with `bd version`.
 
-### 3. Install the skills
+### 3. Get the skills
 
-Clone this repo and copy the skills and agent into your global Claude config:
+Clone this repo into your project folder — the skills are in `.claude/skills/` and Claude Code picks them up automatically:
 
 ```bash
-git clone https://github.com/chadallen/claude-workflow.git
-cd claude-workflow
-mkdir -p ~/.claude/skills ~/.claude/agents
-cp -r skills/* ~/.claude/skills/
-cp agents/code-reviewer.MD ~/.claude/agents/
+git clone https://github.com/chadallen/claude-workflow.git my-project
+cd my-project && claude
 ```
 
-You only need to do this once. The skills are now available in every Claude Code session.
+That's it. No copying required. If you later want the skills available globally across all projects, copy them once:
+
+```bash
+cp -r .claude/skills/* ~/.claude/skills/
+cp .claude/agents/code-reviewer.MD ~/.claude/agents/
+```
 
 ### 3a. Linters (install when you need them)
 
