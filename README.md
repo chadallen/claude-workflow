@@ -47,7 +47,7 @@ The basic workflow is `start-session` → `create-beads` → `build-beads` → `
 | `/init-project` | Brand new project. Reads your PRD, creates CLAUDE.md and plan.MD, inits beads. |
 | `/start-session` | Beginning of a session. Reads docs and beads, flags missing ADRs, proposes a plan. |
 | `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
-| `/create-beads` | Turns a conversation into tasks. Writes a proposal for you to review, creates Beads on approval. Tip: once it has the proposal open, you can just keep adding to it: "add another task to make all of the buttons blue." |
+| `/create-beads` | Turns a conversation into tasks. Writes a proposal for you to review, creates Beads on approval. Tip: once it has the proposal open, you can just keep adding to it: "add another task to make all of the buttons blue." After the PRD is written, this is your other main human touch point with the workflow.|
 | `/build-beads` | Will ask you what Beads tasks to work on. Sub-agents write code and other sub-agents review. You can walk away if you the agents have full bypass permissions. |
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
 | `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits beads, imports tasks. |
