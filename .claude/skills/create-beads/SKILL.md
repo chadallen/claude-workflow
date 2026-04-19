@@ -23,7 +23,7 @@ Based on the conversation, decide whether the work needs an epic:
 - **Single task:** Trivial change, one file or one clear action. Skip the epic, create one task.
 - **Epic with tasks:** Multi-step work, crosses multiple files, has internal dependencies, or benefits from being tracked as a unit.
 
-If unsure, default to an epic when there are 3 or more tasks.
+If unsure, default to an epic when there are 3 or more tasks. If there is NOT enough relevant conversation to start creating beads, ask the user to describe a task or tasks.
 
 ---
 
@@ -73,7 +73,7 @@ Keep task descriptions concise — 2-5 sentences. The agent implementing the tas
 
 Tell the user:
 
-> Proposal written to `.beads/proposal.md`. Review and edit as needed — reorder tasks, adjust scope, change dependencies, delete what you don't want. Reply when ready and I'll create the beads.
+> Proposal written to `.beads/proposal.md`. Review and edit as needed — reorder tasks, adjust scope, change dependencies, delete what you don't want. Or tell me here that you want to add another task and describe it. Reply when ready and I'll create the beads or add more tasks.
 
 Wait for the user. Don't create any beads yet.
 
