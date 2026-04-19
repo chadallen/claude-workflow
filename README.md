@@ -2,24 +2,28 @@
 
 Let's create the world of autonomous vibe coding agents we deserve so that AI can provide for us while we pursue the realization of our authentic selves. It will only happen if these agents have better memories and more focused work habits.
 
-There are a lot of words down below that you can read if that's your thing. But, like, YOLO: just take an existing Claude code project, clone this repo there and invoke the `/init-project` skill. If you want to try this on a new Claude code project, clone this repo, update PRD.MD with your dumbest ideas and invoke `/migrate-project`. From there do what the agent tells you to do. The basic workflow is `start-session` -> `create-beads` -> `build beads` -> `end-session`. You can skip `create-beads` if you already have a backlog of Beads. Don't know what Beads are? Whatever, man.
+I made this for myself. Claude describes it below using many words that you can read if that's your thing. Or just try it:
+
+Install the skills once (see [First time setup](#first-time-setup-if-youre-new-to-this) below), then:
+
+1. For an existing project: open it in Claude Code and invoke `/migrate-project`.
+
+2. For a new project: create a folder, add your `PRD.md`, open it in Claude Code, and invoke `/init-project`. The basic workflow from there is `start-session` → `create-beads` → `build-beads` → `end-session`. Don't know what Beads are? Whatever, man.
 
 # The long version 
 
 
 ## The pieces
 
+**PRD.md** — Product managers take a moment to silently reflect: agents are the only developers who have ever read a PRD front to back. Even they grow weary, so when something in this doc becomes working software they'll replace your garrulous prose with a code pointer. This is really the only doc you need to touch in this workflow.
+
 **CLAUDE.md** — The usual stuff. Stack, conventions, hard rules. If you're starting a new project just let Claude write this. Actually don't ever touch this. Agents will maintain it.
 
-**PRD.md** — Product managers take a moment to silently reflect: agents are the only developers who have ever read a PRD front to back. Even they grow weary, so when something in this doc becomes working software they'll replace your garrulous prose with a code pointer.
+**plan.MD** — The big picture. Phases, what's active, what's next. Agents update it every session. The detailed task-level stuff lives in beads. Don't touch this either.
 
-**plan.MD** — The big picture. Phases, what's active, what's next. Agents update it every session. The detailed task-level stuff lives in beads.
+**`docs/adr/`** — Architecture Decision Records. Short notes on why we made the choices we did. Curtails the idle speculation of idle agents about what might have been. They will write and maintain these.
 
-**`docs/adr/`** — Architecture Decision Records. Short notes on why we made the choices we did. Curtails the idle speculation of idle agents about what might have been.
-
-**[Beads](https://github.com/steveyegge/beads)** — Task tracker for AI agents, built by Yegge in a fugue state. Tasks have description, design, acceptance criteria, and notes fields. Epics group tasks. Dependencies are tracked, so `bd ready` only surfaces work that's actually unblocked.
-
-`bd setup claude` installs hooks that auto-inject task state at session start. Commits include the task ID (`git commit -m "fix login (bd-42)"`) so `bd doctor` can catch work that got committed but never closed.
+**[Beads](https://github.com/steveyegge/beads)** — Task tracker for AI agents, built by Yegge in a fugue state. Tasks have description, design, acceptance criteria, and notes fields. Epics group tasks. Dependencies are tracked.
 
 ## The skills
 
@@ -28,7 +32,7 @@ There are a lot of words down below that you can read if that's your thing. But,
 | `/init-project` | Brand new project. Reads your PRD, creates CLAUDE.md and plan.MD, inits beads. |
 | `/start-session` | Beginning of a session. Reads docs and beads, flags missing ADRs, proposes a plan. |
 | `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
-| `/create-beads` | Turns a conversation into tasks. Writes a proposal for you to review, creates on approval. |
+| `/create-beads` | Turns a conversation into tasks. Writes a proposal for you to review, creates Beads on approval. |
 | `/build-beads` | Autonomously builds tasks with code review after each one. You can walk away. |
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
 | `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits beads, imports tasks. |
@@ -71,12 +75,17 @@ Linux: See [beads installation](https://github.com/steveyegge/beads) for your di
 
 ### 3. Install the skills
 
-```bash
-mkdir -p ~/.claude/skills ~/.claude/agents
+Clone this repo and copy the skills and agent into your global Claude config:
 
-cp -r path/to/this-repo/skills/* ~/.claude/skills/
-cp path/to/this-repo/agents/code-reviewer.MD ~/.claude/agents/
+```bash
+git clone https://github.com/chadallen/claude-workflow.git
+cd claude-workflow
+mkdir -p ~/.claude/skills ~/.claude/agents
+cp -r skills/* ~/.claude/skills/
+cp agents/code-reviewer.MD ~/.claude/agents/
 ```
+
+You only need to do this once. The skills are now available in every Claude Code session.
 
 ### 3a. Linters (install when you need them)
 
@@ -90,7 +99,7 @@ git init
 claude
 ```
 
-Add your `PRD.md` to the folder, then:
+Add your `PRD.md` to the folder. You can use the template provided or roll your own. Then:
 
 ```
 /init-project
@@ -122,7 +131,7 @@ Agent reads docs and beads state, surfaces the next ready task, flags any unreco
 /end-session
 ```
 
-Closes completed tasks, checks for ADR-worthy decisions, updates the docs, commits and pushes everything. Session isn't done until `git push` and `bd sync` both succeed. Prompts you to run `/clear` when done.
+Closes completed tasks, checks for ADR-worthy decisions, updates the docs, commits and pushes everything. Session isn't done until `git push` and `bd dolt push` both succeed. Prompts you to run `/clear` when done.
 
 ### Breaking work into tasks
 
@@ -172,6 +181,4 @@ bd list --status open # all open tasks
 bd stats              # project overview
 ```
 
----
 
-`/create-beads` and `/build-beads` are adapted from [Jarred Kenny's beads workflow](https://jx0.ca/solving-agent-context-loss/).
