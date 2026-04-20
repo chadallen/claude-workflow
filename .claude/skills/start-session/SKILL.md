@@ -1,6 +1,6 @@
 ---
 name: start-session
-description: Reads CLAUDE.md, PRD.md, plan.MD, and beads state to orient the agent at the start of a coding session. Flags missing ADRs, surfaces ready tasks, and proposes a session plan for user approval.
+description: Reads CLAUDE.md, PRD.md, plan.MD, and task state to orient the agent at the start of a coding session. Flags missing ADRs, surfaces ready tasks, and proposes a session plan for user approval.
 when_to_use: Use at the beginning of every coding session. Trigger phrases: "start session", "let's get started", "pick up where we left off", "new session", "what's next", "/start-session".
 disable-model-invocation: true
 allowed-tools: Bash, Read
@@ -10,7 +10,7 @@ allowed-tools: Bash, Read
 
 Run this procedure exactly. Do NOT write any code or make any changes until the user explicitly approves the plan.
 
-If `bd setup claude` has been run on this project, beads context is already injected at session start by the SessionStart hook (`bd prime`). You can build on that context — don't duplicate it.
+If `bd setup claude` has been run on this project, task context is already injected at session start by the SessionStart hook (`bd prime`). You can build on that context — don't duplicate it.
 
 ## Step 1: Check project state
 
@@ -33,7 +33,7 @@ If plan.MD doesn't exist, stop. This project hasn't been set up for this workflo
 
 If `docs/adr/` exists, quickly review plan.MD's recent Current Status entries. If any session mentions an architectural decision that doesn't have a corresponding ADR, note it. Don't create it now — mention it in the session plan (Step 5) so the user can decide whether to record it before starting new work.
 
-## Step 4: Check beads state
+## Step 4: Check task state
 
 If `bd prime` already ran via hook, you have most of this. Otherwise run:
 
@@ -50,7 +50,7 @@ Print for the user:
 1. **Last session recap** — 2-3 sentences from plan.MD's most recent Current Status entry.
 2. **Active epic status** — If there's an active epic noted in plan.MD: count of open/in_progress/closed tasks. Example: "`enzo-12` (Phase 6): 2 closed, 1 in progress, 4 open."
 3. **Next ready task(s)** — Top 1-3 tasks from `bd ready`, each with ID and title.
-4. **Proposed focus** — What you recommend working on this session. Default to the highest-priority ready task. If the remaining tasks in the active epic are well-specified, mention that `/build-beads <epic-id>` could run them autonomously.
+4. **Proposed focus** — What you recommend working on this session. Default to the highest-priority ready task. If the remaining tasks in the active epic are well-specified, mention that `/build-tasks <epic-id>` could run them autonomously.
 5. **Missing ADRs** — If Step 3 found any undocumented architectural decisions from recent sessions, list them here. Offer to create them before starting new work.
 6. **Blockers or questions** — Anything from plan.MD's Known Issues, from `bd blocked`, or anything ambiguous where you want clarification before starting.
 7. **Estimated scope** — Rough sense of how much fits in this session.

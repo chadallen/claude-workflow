@@ -1,6 +1,6 @@
 ---
 name: init-project
-description: Sets up a brand new project from a PRD. Checks for Claude Code initialization and PRD.md, then creates CLAUDE.md, plan.MD, initializes beads, and installs hooks. Ends by explaining how to use /create-beads — the user runs that when ready.
+description: Sets up a brand new project from a PRD. Checks for Claude Code initialization and PRD.md, then creates CLAUDE.md, plan.MD, initializes task tracking, and installs hooks. Ends by explaining how to use /create-tasks — the user runs that when ready.
 when_to_use: Use once at the start of a brand new project after adding PRD.md to the repo. Trigger phrases: "set up this project", "initialize the workflow", "new project setup", "/init-project".
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write
@@ -8,9 +8,9 @@ allowed-tools: Bash, Read, Write
 
 # Init Project
 
-Sets up a new project for the planning docs + beads workflow. Run this once after cloning the repo template and adding your PRD.
+Sets up a new project for the planning docs + task workflow. Run this once after cloning the repo template and adding your PRD.
 
-This skill does NOT create tasks. When setup is complete it explains how to use `/create-beads` — you run that yourself when ready.
+This skill does NOT create tasks. When setup is complete it explains how to use `/create-tasks` — you run that yourself when ready.
 
 ---
 
@@ -83,10 +83,10 @@ Always include this section at the end:
 ```
 ## Task Tracking
 
-This project uses beads. Run `bd ready` for next tasks.
+Task tracking is via bd. Run `bd ready` for next tasks.
 Commits include the task ID: `git commit -m "<message> (<task-id>)"`
 
-Skills: /start-session, /end-session, /create-beads, /build-beads, /adr
+Skills: /start-session, /end-session, /create-tasks, /build-tasks, /adr
 ```
 
 Show the user the draft and wait for approval before writing it to disk.
@@ -100,8 +100,8 @@ Build plan.MD from the PRD's build sequence or feature roadmap:
 ```markdown
 # [Project Name] — Plan
 
-**Task tracking:** This project uses beads. Run `bd ready` for next tasks.
-**Active epic:** none yet — run `/create-beads` to create your first epic
+**Task tracking:** Task tracking is via bd. Run `bd ready` for next tasks.
+**Active epic:** none yet — run `/create-tasks` to create your first epic
 
 ---
 
@@ -116,7 +116,7 @@ If the PRD has a Build Sequence section, use that. Otherwise infer from the feat
 
 ### [Today's date]
 
-Project initialized. CLAUDE.md and plan.MD created from PRD. Beads initialized and hooks installed. Ready to create first epic with `/create-beads`.
+Project initialized. CLAUDE.md and plan.MD created from PRD. Task tracking initialized and hooks installed. Ready to create first epic with `/create-tasks`.
 
 ---
 
@@ -145,13 +145,13 @@ This directory will hold Architecture Decision Records as they're created.
 
 ---
 
-## Step 7: Initialize beads
+## Step 7: Initialize task tracking
 
 ```bash
 bd init --quiet
 ```
 
-If beads isn't installed, stop:
+If bd isn't installed, stop:
 
 > beads isn't installed. Install it with `brew install beads` (macOS) or see https://github.com/steveyegge/beads for other platforms, then run `/init-project` again.
 
@@ -224,14 +224,14 @@ Created:
 
 Next step: create your first tasks.
 
-Run /create-beads in Claude Code. The agent will read your PRD and
+Run /create-tasks in Claude Code. The agent will read your PRD and
 conversation context, propose a set of tasks in a scratch file
 (.beads/proposal.md), and wait for you to review and edit before
-creating anything in beads.
+creating anything.
 
 Once tasks exist, use:
   /start-session   — begin a session and pick up the next task
-  /build-beads     — run tasks autonomously with code review
+  /build-tasks     — run tasks autonomously with code review
   /end-session     — close tasks, update docs, push everything
 ```
 
@@ -242,4 +242,4 @@ Once tasks exist, use:
 - **Check prerequisites first.** Claude Code init and PRD.md must both exist before doing anything else.
 - **Ask, don't infer.** A few targeted questions to the user are cheaper than reading the whole codebase and guessing wrong.
 - **CLAUDE.md from the PRD, not the other way around.** The PRD is the source of truth. CLAUDE.md is a distillation of what the agent needs every session.
-- **Don't run /create-beads.** Setup ends at Step 9. The user runs create-beads when they're ready.
+- **Don't run /create-tasks.** Setup ends at Step 9. The user runs create-tasks when they're ready.

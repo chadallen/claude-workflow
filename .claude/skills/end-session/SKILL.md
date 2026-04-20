@@ -1,6 +1,6 @@
 ---
 name: end-session
-description: Closes completed beads tasks, checks for ADR-worthy decisions, updates CLAUDE.md/PRD.md/plan.MD, commits all changes, and pushes to remote. Session is not complete until git push and bd dolt push both succeed.
+description: Closes completed tasks, checks for ADR-worthy decisions, updates CLAUDE.md/PRD.md/plan.MD, commits all changes, and pushes to remote. Session is not complete until git push and bd dolt push both succeed.
 when_to_use: Use at the end of every coding session. Trigger phrases: "end session", "wrap up", "done for now", "let's stop here", "land the plane", "/end-session".
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write
@@ -10,7 +10,7 @@ allowed-tools: Bash, Read, Write
 
 Run this procedure exactly. Do NOT write any project code during this procedure. The session is NOT done until the final `git push` and `bd dolt push` succeed.
 
-## Step 1: Close completed beads issues
+## Step 1: Close completed tasks
 
 For each task completed this session:
 
@@ -87,15 +87,15 @@ If nothing changed, leave it alone.
 
 ## Step 7: Update plan.MD
 
-plan.MD has three sections in the beads workflow:
+plan.MD has three sections in the workflow:
 
 **Overall Plan** — The high-level phase/epic roadmap. Which epic is active. What's next after the current one. Update only if the plan itself changed.
 
-**Current Status** — What was accomplished this session. Be specific: features shipped, bugs fixed, decisions made, beads tasks closed (with IDs). Include the date. End the entry with a **Next session:** line naming the 1-2 recommended tasks by ID and title (from Step 12's ready-task check). If there are >5 ready tasks, note that too so the next session knows to address the sequencing before picking up work.
+**Current Status** — What was accomplished this session. Be specific: features shipped, bugs fixed, decisions made, tasks closed (with IDs). Include the date. End the entry with a **Next session:** line naming the 1-2 recommended tasks by ID and title (from Step 12's ready-task check). If there are >5 ready tasks, note that too so the next session knows to address the sequencing before picking up work.
 
-**Known Issues / Blockers** — Anything unresolved that isn't already a beads task: blocked-on-user decisions, manual testing needed, environment issues, open design questions.
+**Known Issues / Blockers** — Anything unresolved that isn't already a task: blocked-on-user decisions, manual testing needed, environment issues, open design questions.
 
-plan.MD should NOT contain a "What Remains" section — that's beads now.
+plan.MD should NOT contain a "What Remains" section — that's tracked as tasks.
 
 **Prune session history.** Keep at most 3 recent entries in Current Status. Before removing older entries, check for decisions or rationale not captured elsewhere — migrate anything important to Overall Plan or Known Issues.
 
@@ -131,7 +131,7 @@ Commit: `docs: end-of-session update — <brief summary>`. Include any task IDs 
 1. `git pull --rebase` — pull any remote changes first.
 2. `git push` — push everything.
 3. `git status` — must show "up to date with origin/<branch>".
-4. `bd dolt push` — push beads data to remote.
+4. `bd dolt push` — push task data to remote.
 5. If any step fails, resolve the issue and retry. Do not give up.
 
 Do NOT end the session with unpushed work. Do NOT tell the user "ready to push when you are." Push it yourself.

@@ -1,25 +1,25 @@
 ---
-name: build-beads
-description: Autonomously builds beads tasks using fresh subagents per task with comprehensive code review (tests, linting, security, performance, simplification) after each one. Resumable across sessions. Accepts an epic ID, one or more task IDs, or no argument to build the next ready task.
-when_to_use: Use when tasks are well-specified and can be implemented without real-time judgment. Trigger phrases: "build the epic", "run the tasks", "execute autonomously", "/build-beads".
+name: build-tasks
+description: Autonomously builds tasks using fresh subagents per task with comprehensive code review (tests, linting, security, performance, simplification) after each one. Resumable across sessions. Accepts an epic ID, one or more task IDs, or no argument to build the next ready task.
+when_to_use: Use when tasks are well-specified and can be implemented without real-time judgment. Trigger phrases: "build the epic", "run the tasks", "execute autonomously", "/build-tasks".
 argument-hint: "[epic-id | task-id ...]"
 disable-model-invocation: true
 allowed-tools: Bash, Read
 effort: high
 ---
 
-# Build Beads
+# Build Tasks
 
-Build beads tasks autonomously. Loops: get next ready task → implement with fresh subagent → run `code-reviewer` subagent → close task on approval → push → repeat.
+Build tasks autonomously. Loops: get next ready task → implement with fresh subagent → run `code-reviewer` subagent → close task on approval → push → repeat.
 
 Use when tasks are well-specified and can be implemented without real-time human judgment. For UI work that needs visual iteration or live design decisions, work tasks manually with `/start-session` instead.
 
 ## Usage
 
 ```
-/build-beads <epic-id>              # build all tasks in an epic
-/build-beads <task-id> [<task-id>]  # build specific tasks
-/build-beads                        # build next ready task (stops after one)
+/build-tasks <epic-id>              # build all tasks in an epic
+/build-tasks <task-id> [<task-id>]  # build specific tasks
+/build-tasks                        # build next ready task (stops after one)
 ```
 
 ## Step 1: Validate scope

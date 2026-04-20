@@ -1,14 +1,14 @@
 ---
-name: create-beads
-description: Turns recent conversation context into beads tasks (and an epic if the work warrants it). Writes a proposal to .beads/proposal.md for the user to review and edit, then creates the beads on approval.
-when_to_use: Use after brainstorming a feature or set of changes in chat. Trigger phrases: "create tasks", "make beads", "break this into tasks", "turn this into an epic", "/create-beads".
+name: create-tasks
+description: Turns recent conversation context into tasks (and an epic if the work warrants it). Writes a proposal to .beads/proposal.md for the user to review and edit, then creates the tasks on approval.
+when_to_use: Use after brainstorming a feature or set of changes in chat. Trigger phrases: "create tasks", "make tasks", "break this into tasks", "turn this into an epic", "/create-tasks".
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write
 ---
 
-# Create Beads
+# Create Tasks
 
-Turns recent conversation context into beads tasks (and an epic if the work warrants it). The user reviews a proposal in a scratch markdown file, edits as needed, and the agent creates the beads when they confirm.
+Turns recent conversation context into tasks (and an epic if the work warrants it). The user reviews a proposal in a scratch markdown file, edits as needed, and the agent creates the tasks when they confirm.
 
 Use this when:
 - You've discussed a feature or set of changes in chat
@@ -23,18 +23,18 @@ Based on the conversation, decide whether the work needs an epic:
 - **Single task:** Trivial change, one file or one clear action. Skip the epic, create one task.
 - **Epic with tasks:** Multi-step work, crosses multiple files, has internal dependencies, or benefits from being tracked as a unit.
 
-If unsure, default to an epic when there are 3 or more tasks. If there is NOT enough relevant conversation to start creating beads, ask the user to describe a task or tasks.
+If unsure, default to an epic when there are 3 or more tasks. If there is NOT enough relevant conversation to start creating tasks, ask the user to describe a task or tasks.
 
 ---
 
 ## Step 2: Draft the proposal
 
-Write a scratch file at `.beads/proposal.md` (create `.beads/` if it doesn't exist — it's already gitignored by beads).
+Write a scratch file at `.beads/proposal.md` (create `.beads/` if it doesn't exist — it's already gitignored).
 
 **Format:**
 
 ```markdown
-# Beads Proposal — [Feature or work summary]
+# Task Proposal — [Feature or work summary]
 
 ## Epic (if applicable)
 
@@ -73,13 +73,13 @@ Keep task descriptions concise — 2-5 sentences. The agent implementing the tas
 
 Tell the user:
 
-> Proposal written to `.beads/proposal.md`. Review and edit as needed — reorder tasks, adjust scope, change dependencies, delete what you don't want. Or tell me here that you want to add another task and describe it. Reply when ready and I'll create the beads or add more tasks.
+> Proposal written to `.beads/proposal.md`. Review and edit as needed — reorder tasks, adjust scope, change dependencies, delete what you don't want. Or tell me here that you want to add another task and describe it. Reply when ready and I'll create the tasks or add more.
 
-Wait for the user. Don't create any beads yet.
+Wait for the user. Don't create any tasks yet.
 
 ---
 
-## Step 4: Create the beads
+## Step 4: Create the tasks
 
 When the user confirms, read `.beads/proposal.md` again (in case they edited it) and create:
 
@@ -154,7 +154,7 @@ Print:
 - Epic ID and title (if created)
 - Task count and IDs
 - Dependency summary (e.g., "task 2 depends on task 1; task 3 depends on tasks 1 and 2")
-- Next step: `/build-beads <epic-id>` for autonomous execution, or `/start-session` to pick up the next ready task manually
+- Next step: `/build-tasks <epic-id>` for autonomous execution, or `/start-session` to pick up the next ready task manually
 
 ---
 
@@ -164,6 +164,6 @@ Print:
 - **Derive acceptance criteria from the PRD.** Users describe intent; agents translate it into verifiable outcomes. If acceptance criteria aren't explicit in the conversation, read the relevant PRD feature description and write criteria that a reviewer could check without asking the user. Prefer observable behavior ("tapping X shows Y") over implementation details ("function Z returns true").
 - **Edit in the file, not in chat.** Scratch markdown is faster to review and edit than asking for changes through multiple chat turns.
 - **Read the file again before creating.** The user may have edited it — don't rely on what the agent drafted.
-- **Default to smaller tasks.** If a task description feels like it covers too much, split it. Beads tasks should be 30-90 minute chunks of work.
+- **Default to smaller tasks.** If a task description feels like it covers too much, split it. Tasks should be 30-90 minute chunks of work.
 - **Chain sequential tasks.** A flat list where every task has "Depends on: None" is a red flag — it means everything becomes ready at once and the agent has no guidance on order. If tasks are naturally sequential (T2 needs T1's output, T3 needs T2's scaffolding), set explicit dependencies. Only tasks that can genuinely run in parallel should share the same dependency level.
 - **Use `--json`.** All bd commands use `--json` for reliable parsing.

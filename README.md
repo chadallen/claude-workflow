@@ -21,7 +21,7 @@ git clone https://github.com/chadallen/claude-workflow.git your-project-path
 1. For a new project: write your `PRD.md` (get Claude to help you) and invoke `/init-project`. Use the PRD template if you want.
 2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in your project.
 
-The basic workflow is `start-session` → `create-beads` and/or `build-beads` → `end-session`. Don't know what Beads are? Whatever, man.
+The basic workflow is `start-session` → `create-tasks` and/or `build-tasks` → `end-session`. Don't know what Beads are? Whatever, man.
 
 # The long version 
 
@@ -32,7 +32,7 @@ The basic workflow is `start-session` → `create-beads` and/or `build-beads` �
 
 **CLAUDE.md** — The usual stuff. Stack, conventions, hard rules. If you're starting a new project just let Claude write this. Actually don't ever touch this. Agents will maintain it.
 
-**plan.MD** — The big picture. Phases, what's active, what's next. Agents update it every session. The detailed task-level stuff lives in beads. Don't touch this either.
+**plan.MD** — The big picture. Phases, what's active, what's next. Agents update it every session. The detailed task-level stuff is tracked as tasks. Don't touch this either.
 
 **`docs/adr/`** — Architecture Decision Records. Short notes on why we made the choices we did. Curtails the idle speculation of idle agents about what might have been. They will write and maintain these.
 
@@ -42,13 +42,13 @@ The basic workflow is `start-session` → `create-beads` and/or `build-beads` �
 
 | Skill | When |
 |---|---|
-| `/init-project` | Brand new project. Reads your PRD, creates CLAUDE.md and plan.MD, inits beads. |
-| `/start-session` | Beginning of a session. Reads docs and beads, flags missing ADRs, proposes a plan. |
+| `/init-project` | Brand new project. Reads your PRD, creates CLAUDE.md and plan.MD, inits task tracking. |
+| `/start-session` | Beginning of a session. Reads docs and task state, flags missing ADRs, proposes a plan. |
 | `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
-| `/create-beads` | Turns a conversation into tasks. Writes a proposal for you to review, creates Beads on approval. Tip: once it has the proposal open, you can just keep adding to it: "add another task to make all of the buttons blue." After the PRD is written, this is your other main human touch point with the workflow.|
-| `/build-beads` | Will ask you what Beads tasks to work on. Sub-agents write code and other sub-agents review. You can walk away if you the agents have full bypass permissions. |
+| `/create-tasks` | Turns a conversation into tasks. Writes a proposal for you to review, creates tasks on approval. Tip: once it has the proposal open, you can just keep adding to it: "add another task to make all of the buttons blue." After the PRD is written, this is your other main human touch point with the workflow.|
+| `/build-tasks` | Will ask you what tasks to work on. Sub-agents write code and other sub-agents review. You can walk away if you the agents have full bypass permissions. |
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
-| `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits beads, imports tasks. |
+| `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits task tracking, imports tasks. |
 
 
 > **Want these skills available in all your projects?** Copy them to your global Claude config once:
@@ -129,7 +129,7 @@ Add your `PRD.md` to the folder. You can use the template provided or roll your 
 /init-project
 ```
 
-The skill reads your PRD, asks a few quick questions about your stack, creates CLAUDE.md and plan.MD, inits beads, and installs hooks. When it's done it tells you how to create your first tasks.
+The skill reads your PRD, asks a few quick questions about your stack, creates CLAUDE.md and plan.MD, inits task tracking, and installs hooks. When it's done it tells you how to create your first tasks.
 
 ---
 
@@ -147,7 +147,7 @@ Already set up? Existing project? Run `/migrate-project` instead of `/init-proje
 /start-session
 ```
 
-Agent reads docs and beads state, surfaces the next ready task, flags any unrecorded architectural decisions from last session, proposes a plan. You approve or adjust.
+Agent reads docs and task state, surfaces the next ready task, flags any unrecorded architectural decisions from last session, proposes a plan. You approve or adjust.
 
 ### Ending a session
 
@@ -162,17 +162,17 @@ Closes completed tasks, checks for ADR-worthy decisions, updates the docs, commi
 Brainstorm with the agent in chat first. When the shape of the work is clear:
 
 ```
-/create-beads
+/create-tasks
 ```
 
-Agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, design context, acceptance criteria, and dependencies. Edit the file directly or tell Claude what to change. Reorder, rescope, add more tasks, delete what you don't want. Reply when ready and it creates the beads.
+Agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, design context, acceptance criteria, and dependencies. Edit the file directly or tell Claude what to change. Reorder, rescope, add more tasks, delete what you don't want. Reply when ready and it creates the tasks.
 
 ### Building tasks autonomously
 
 ```
-/build-beads <epic-id>      # all tasks in an epic
-/build-beads <task-id>      # one specific task
-/build-beads                # next ready task
+/build-tasks <epic-id>      # all tasks in an epic
+/build-tasks <task-id>      # one specific task
+/build-tasks                # next ready task
 ```
 
 Fresh subagent per task, comprehensive code review after each one (tests, linting, security, performance, simplification), fixes issues, closes task, moves on. You can walk away. Resumes where it left off.

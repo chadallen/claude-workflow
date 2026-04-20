@@ -1,13 +1,13 @@
 ---
 name: migrate-project
-description: Sets up the three-file plus beads workflow on any project. Detects what already exists and skips it — works on greenfield projects, partially set up projects, and projects with existing docs. One-time setup per project.
+description: Sets up the three-file plus task workflow on any project. Detects what already exists and skips it — works on greenfield projects, partially set up projects, and projects with existing docs. One-time setup per project.
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write
 ---
 
 # Migrate
 
-Sets up the complete workflow on any project: CLAUDE.md, PRD.md, plan.MD, docs/adr/, beads, and Claude Code hooks. Detects what already exists and skips it. Constructs what's missing.
+Sets up the complete workflow on any project: CLAUDE.md, PRD.md, plan.MD, docs/adr/, task tracking, and Claude Code hooks. Detects what already exists and skips it. Constructs what's missing.
 
 Do NOT write any application code during this migration.
 
@@ -35,15 +35,15 @@ Check for each of the following and note present/missing:
 - `plan.MD` (or `plan.md`)
 - `docs/adr/` directory
 - `.beads/` directory
-- `.claude/` settings with beads hooks
+- `.claude/` settings with task hooks
 
-If everything exists and beads is initialized, this project may already be migrated. Confirm with the user before proceeding.
+If everything exists and task tracking is initialized, this project may already be migrated. Confirm with the user before proceeding.
 
 ---
 
 ## Step 2: Verify prerequisites
 
-- `bd version` — beads must be installed. If not, stop and tell the user to install it first.
+- `bd version` — bd must be installed. If not, stop and tell the user to install it first.
 - `git status` — must be in a git repo. If not, stop.
 - Working tree should be clean. If not, stop and ask the user what to do with uncommitted work.
 
@@ -68,13 +68,13 @@ CLAUDE.md must contain:
   - Prompt the user when manual testing or decisions are needed
   - Do not read scratch.md
 
-Add beads task tracking reference:
+Add task tracking reference:
 
 ```
 ## Task tracking
 
-This project uses beads. Run `bd ready` for next tasks.
-Skills: /start-session, /end-session, /create-beads, /build-beads, /adr
+Task tracking is via bd. Run `bd ready` for next tasks.
+Skills: /start-session, /end-session, /create-tasks, /build-tasks, /adr
 ```
 
 CLAUDE.md must NOT contain progress tracking, session history, or implementation specs.
@@ -99,17 +99,17 @@ PRD.md must NOT contain build progress, session history, or project rules.
 
 ## Step 5: Build plan.MD (if missing)
 
-If plan.MD exists and already has the correct structure (Overall Plan, Current Status, Known Issues), leave it alone unless it contains a "What Remains" section — that moves to beads.
+If plan.MD exists and already has the correct structure (Overall Plan, Current Status, Known Issues), leave it alone unless it contains a "What Remains" section — that moves to task tracking.
 
 If plan.MD doesn't exist, or has stale structure (e.g., contains handoff notes, kickoff prompts, or a "What Remains" task list), construct it:
 
-**Overall Plan** — High-level phase or milestone roadmap. Extract from existing docs. Reference active epic by ID once beads is set up (Step 7).
+**Overall Plan** — High-level phase or milestone roadmap. Extract from existing docs. Reference active epic by ID once task tracking is set up (Step 7).
 
-**Current Status** — One entry dated today: "Migrated to three-file plus beads workflow. Project state at migration: [brief summary of what's built vs what's planned]."
+**Current Status** — One entry dated today: "Migrated to three-file plus task workflow. Project state at migration: [brief summary of what's built vs what's planned]."
 
-**Known Issues / Blockers** — Anything the user mentioned that's unresolved and doesn't fit as a beads task.
+**Known Issues / Blockers** — Anything the user mentioned that's unresolved and doesn't fit as a task.
 
-plan.MD must NOT contain a "What Remains" task list — that's beads.
+plan.MD must NOT contain a "What Remains" task list — tracked as tasks.
 
 ---
 
@@ -132,7 +132,7 @@ If no ADR-worthy decisions are found, create the `docs/adr/` directory and note 
 
 ---
 
-## Step 7: Initialize beads
+## Step 7: Initialize task tracking
 
 If `.beads/` doesn't exist:
 
@@ -173,13 +173,13 @@ json.dump(s, open(p, 'w'), indent=2)
 
 ## Step 9: Propose initial epic structure
 
-Based on plan.MD's Overall Plan and any "What Remains" content found during migration, propose beads epics for unbuilt work:
+Based on plan.MD's Overall Plan and any "What Remains" content found during migration, propose epics for unbuilt work:
 
 - One epic per phase or major feature area
 - Tasks within each epic with inferred dependencies
 - Only for work that is genuinely unbuilt
 
-Show the proposed structure and wait for approval before creating anything in beads. If the user has nothing planned yet or the project is fully caught up, skip this step — they can use `/create-beads` when ready.
+Show the proposed structure and wait for approval before creating anything. If the user has nothing planned yet or the project is fully caught up, skip this step — they can use `/create-tasks` when ready.
 
 For each approved epic and task:
 
@@ -215,7 +215,7 @@ Add `scratch.md` to `.gitignore` if not already there.
 
 ```bash
 git add .beads/ .claude/ docs/ CLAUDE.md PRD.md plan.MD .gitignore
-git commit -m "chore: migrate to planning docs + ADR + beads workflow"
+git commit -m "chore: migrate to planning docs + ADR + task workflow"
 git push
 bd dolt push
 ```
@@ -233,8 +233,8 @@ Print:
 - Any `TODO:` markers left in new docs that need user input
 - Next steps:
   - `/start-session` to begin working
-  - `/create-beads` when ready to plan the next feature
-  - `/build-beads <epic-id>` to autonomously execute an existing epic
+  - `/create-tasks` when ready to plan the next feature
+  - `/build-tasks <epic-id>` to autonomously execute an existing epic
 
 ---
 
