@@ -171,6 +171,19 @@ json.dump(s, open(p, 'w'), indent=2)
 
 ---
 
+## Step 8: Add .gitignore entries
+
+Ensure these are in `.gitignore`:
+
+```
+scratch.md
+scratch.MD
+```
+
+Add them if missing.
+
+---
+
 ## Step 9: Propose initial epic structure
 
 Based on plan.MD's Overall Plan and any "What Remains" content found during migration, propose epics for unbuilt work:
@@ -206,8 +219,6 @@ For each existing doc that's now redundant (handoff.md, prompt.txt, kickoff-prom
 For docs that don't fit the three-file system but are still useful (ARCHITECTURE.md, BROWSER_RESEARCH.md, runbooks):
 - Suggest moving to `docs/` so they don't clutter the repo root
 - Don't auto-move — ask first
-
-Add `scratch.md` to `.gitignore` if not already there.
 
 ---
 

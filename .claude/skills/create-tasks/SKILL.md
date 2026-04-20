@@ -43,7 +43,7 @@ If unsure, default to an epic when there are 3 or more tasks. If there is NOT en
 
 ## Step 2: Draft the proposal
 
-Write a scratch file at `.beads/proposal.md` (create `.beads/` if it doesn't exist — it's already gitignored).
+Write a scratch file at `.beads/proposal.md` (create `.beads/` if it doesn't exist). This file is deleted before commit in Step 7.
 
 **Format:**
 
@@ -170,7 +170,7 @@ bd dolt push
 
 ---
 
-## Step 7: Summary
+## Step 8: Summary
 
 Print:
 - Epic ID and title (if created)

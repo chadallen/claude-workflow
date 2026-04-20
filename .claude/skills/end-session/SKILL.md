@@ -116,7 +116,7 @@ Re-read all three files. Verify:
 
 - plan.MD doesn't contradict PRD.md.
 - CLAUDE.md has no stale tool/pattern references.
-- Beads state aligns with plan.MD's claimed progress.
+- Task state aligns with plan.MD's claimed progress.
 - plan.MD has no "What Remains" list.
 - No more than 3 session entries in Current Status.
 
@@ -147,7 +147,7 @@ bd ready --json
 Print for the user:
 
 - What was accomplished (2-3 sentences).
-- Beads tasks closed this session (with IDs).
+- Tasks closed this session (with IDs).
 - **Next session focus:** If 5 or fewer tasks are ready, recommend the top 1-2 by ID and title. If more than 5 are ready, flag it: "X tasks are currently ready — this may mean dependencies aren't fully set up. Consider whether some of these should be sequenced before the next session." Then recommend the top 2-3 to focus on based on priority and logical order.
 - Any items needing user attention (manual testing, decisions, external dependencies).
 - Confirmation that everything is pushed and the working tree is clean.
