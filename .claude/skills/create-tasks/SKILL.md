@@ -176,7 +176,9 @@ Print:
 - Epic ID and title (if created)
 - Task count and IDs
 - Dependency summary (e.g., "task 2 depends on task 1; task 3 depends on tasks 1 and 2")
-- Next step: `/build-tasks <epic-id>` for autonomous execution, or `/start-session` to pick up the next ready task manually
+- Next step — tell the user explicitly:
+  - To build autonomously: run `/build-tasks <epic-id>`. Fresh subagents implement each task, a code reviewer checks the work, and tasks close automatically.
+  - To work tasks manually: run `/start-session` to pick up the next ready task.
 
 Do NOT offer to start building or begin implementation. Your job ends here. The user must explicitly invoke `/build-tasks` or `/start-session` themselves.
 
