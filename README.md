@@ -19,7 +19,7 @@ git clone https://github.com/chadallen/claude-workflow.git your-project-path
 1. For a new project: write your `PRD.md` (get Claude to help you) and invoke `/init-project`. Use the `PRD.MD` template if you want.
 2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in your project directory (but you should probably at least glance at it).
 
-The basic workflow is `start-session` → `create-tasks` and/or `build-tasks` → `end-session`. 
+The basic workflow is `/start-session` → `/create-tasks` and/or `/build-tasks` → `/end-session` → `/clear`. 
 
 
 ## The pieces
