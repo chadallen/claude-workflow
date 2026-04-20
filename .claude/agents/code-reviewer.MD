@@ -124,7 +124,8 @@ Anti-patterns:
 - Coverage for coverage's sake on low-risk code
 
 If tests are appropriate, report "Test coverage is proportionate and behavior-focused."
-If no tests exist, note it as a suggestion rather than a blocker unless the changed code is logic-heavy.
+If no tests exist for logic-heavy code (business logic, data transforms, auth, calculations), return NEEDS_CHANGES — missing tests on non-trivial code is a must-fix, not a suggestion.
+If no tests exist for simple glue code or config changes, note it as a suggestion only.
 ```
 
 ### Agent 7: Performance Reviewer
@@ -195,5 +196,5 @@ One sentence on what to do next.
 
 ### Verdict Guidelines
 
-- **APPROVED** — Spec met, all tests pass, no critical/high issues. Missing linter or missing tests alone do not block approval.
-- **NEEDS_CHANGES** — Has critical/high issues, failing tests, or spec gaps that must be fixed before closing the task.
+- **APPROVED** — Spec met, all tests pass, no critical/high issues. Missing linter does not block approval.
+- **NEEDS_CHANGES** — Has critical/high issues, failing tests, spec gaps, or missing tests on logic-heavy code.

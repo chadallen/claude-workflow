@@ -100,7 +100,7 @@ Instructions for the subagent:
 - The `design` field contains the architectural context relevant to this task — read it carefully before writing any code.
 - If you need broader context beyond the design field (e.g., a judgment call about an architectural pattern) and the task has a parent epic, run `bd show <epic-id> --json` to read the epic's description.
 - If you REALLY NEED need broader context, you can read plan.MD and PRD.md, but try to LIMIT reading to the RELEVANT sections — you don't want to get lost in unrelated details.
-- Write tests as specified.
+- Write tests for any non-trivial logic you implement, even if the task spec doesn't explicitly say to. Check CLAUDE.md for the test command — if no test setup exists in the project at all, note it and skip. Otherwise, default to writing tests.
 - Commit frequently with the task ID in parens: `git commit -m "<message> (<task-id>)"`.
 - If any step is ambiguous or blocked, stop and report — do NOT guess.
 - Run tests and confirm they pass before reporting back.
