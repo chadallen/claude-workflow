@@ -1,22 +1,27 @@
 # A workflow for Claude coding with autonomous sub-agents
 
-Let's create the world of autonomous vibe coding agents we deserve so that AI can provide for us while we pursue the realization of our authentic selves. It will only happen if these agents have better memories and more focused work habits.
+Let's create the world of autonomous vibe coding agents we deserve, so that AI can provide for our material needs while we pursue the realization of our authentic selves. It's not just going to magically happen on its own! I'm trying to do my part here. 
+
+The motivations for this workflow (which I use for my personal projects) are:
+
+1. Agents need better memory
+2. Agents work best when they have small, well-defined tasks to complete
+3. Humans should focus on thinking about the "what" and not the "how"
 
 # The short version 
 
-What do you have to lose? Clone this repo into your Claude Code project folder and run:
+I address #1 and #2 by using a lightweight tracker to record, prioritize and manage state on tasks. I address #3 by helping the user focus on defining the product and prioritizing work.
+
+What do you have to lose? Clone this repo into your Claude Code project folder:
 
 ```bash
 git clone https://github.com/chadallen/claude-workflow.git your-project-path
-cd your-project-path && claude
 ```
 
-The skills live in `.claude/skills/` and are picked up automatically by Claude Code. No copying required.
+1. For a new project: write your `PRD.md` (get Claude to help you) and invoke `/init-project`. Use the PRD template if you want.
+2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in your project.
 
-1. For a new project: write your `PRD.md` and invoke `/init-project`. Use the PRD template if you want.
-2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in there.
-
-The basic workflow is `start-session` → `create-beads` → `build-beads` → `end-session`. Don't know what Beads are? Whatever, man.
+The basic workflow is `start-session` → `create-beads` and/or `build-beads` → `end-session`. Don't know what Beads are? Whatever, man.
 
 # The long version 
 
@@ -202,4 +207,4 @@ bd stats              # project overview
 
 ---
 
-Beads workflow inspired by [Jarred Kenny](https://jx0.ca/solving-agent-context-loss/).
+The Beads part workflow inspired by [Jarred Kenny](https://jx0.ca/solving-agent-context-loss/).

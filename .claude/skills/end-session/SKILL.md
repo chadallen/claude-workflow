@@ -91,7 +91,7 @@ plan.MD has three sections in the beads workflow:
 
 **Overall Plan** — The high-level phase/epic roadmap. Which epic is active. What's next after the current one. Update only if the plan itself changed.
 
-**Current Status** — What was accomplished this session. Be specific: features shipped, bugs fixed, decisions made, beads tasks closed (with IDs). Include the date.
+**Current Status** — What was accomplished this session. Be specific: features shipped, bugs fixed, decisions made, beads tasks closed (with IDs). Include the date. End the entry with a **Next session:** line naming the 1-2 recommended tasks by ID and title (from Step 12's ready-task check). If there are >5 ready tasks, note that too so the next session knows to address the sequencing before picking up work.
 
 **Known Issues / Blockers** — Anything unresolved that isn't already a beads task: blocked-on-user decisions, manual testing needed, environment issues, open design questions.
 
@@ -138,11 +138,17 @@ Do NOT end the session with unpushed work. Do NOT tell the user "ready to push w
 
 ## Step 12: Session summary
 
+First, check how many tasks are currently ready:
+
+```bash
+bd ready --json
+```
+
 Print for the user:
 
 - What was accomplished (2-3 sentences).
 - Beads tasks closed this session (with IDs).
-- Top priority for next session (reference the next ready task by ID).
+- **Next session focus:** If 5 or fewer tasks are ready, recommend the top 1-2 by ID and title. If more than 5 are ready, flag it: "X tasks are currently ready — this may mean dependencies aren't fully set up. Consider whether some of these should be sequenced before the next session." Then recommend the top 2-3 to focus on based on priority and logical order.
 - Any items needing user attention (manual testing, decisions, external dependencies).
 - Confirmation that everything is pushed and the working tree is clean.
 

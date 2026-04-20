@@ -165,4 +165,5 @@ Print:
 - **Edit in the file, not in chat.** Scratch markdown is faster to review and edit than asking for changes through multiple chat turns.
 - **Read the file again before creating.** The user may have edited it — don't rely on what the agent drafted.
 - **Default to smaller tasks.** If a task description feels like it covers too much, split it. Beads tasks should be 30-90 minute chunks of work.
+- **Chain sequential tasks.** A flat list where every task has "Depends on: None" is a red flag — it means everything becomes ready at once and the agent has no guidance on order. If tasks are naturally sequential (T2 needs T1's output, T3 needs T2's scaffolding), set explicit dependencies. Only tasks that can genuinely run in parallel should share the same dependency level.
 - **Use `--json`.** All bd commands use `--json` for reliable parsing.
