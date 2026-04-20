@@ -14,9 +14,20 @@ This skill does NOT create tasks. When setup is complete it explains how to use 
 
 ---
 
-## Step 1: Check Claude Code is initialized
+## Step 1: Check prerequisites
 
-Check for a `.claude/` directory in the project root:
+**Check the git remote:**
+
+```bash
+git remote get-url origin 2>/dev/null || echo "NO_REMOTE"
+```
+
+- If the URL contains `claude-workflow`: stop immediately.
+  > This repo's `origin` still points to the claude-workflow template. Set your own remote first: `git remote set-url origin <your-repo-url>`. Then run `/init-project` again.
+- If `NO_REMOTE`: note it — no remote is fine. The push at the end will be skipped.
+- Otherwise: proceed normally.
+
+**Check Claude Code is initialized:**
 
 ```bash
 ls .claude/
@@ -210,17 +221,10 @@ git add CLAUDE.md plan.MD docs/ .beads/ .claude/ .gitignore
 git commit -m "chore: init project workflow"
 ```
 
-Before pushing, check the remote:
+If Step 1 found no remote, skip the pushes and tell the user:
+> No remote configured — push manually once you've added one: `git remote add origin <url> && git push -u origin main && bd dolt push`
 
-```bash
-git remote get-url origin 2>/dev/null || echo "NO_REMOTE"
-```
-
-- If the output is `NO_REMOTE`: tell the user no remote is configured and skip `git push`. They'll need to add one (`git remote add origin <url>`) and push manually.
-- If the URL contains `chadallen/claude-workflow`: **stop immediately.** Tell the user:
-  > This repo's origin still points to the claude-workflow template. Update it before pushing: `git remote set-url origin <your-repo-url>`
-  Do NOT push. Skip `git push` and `bd dolt push`.
-- Otherwise: push normally.
+Otherwise:
 
 ```bash
 git push

@@ -46,6 +46,10 @@ If everything exists and task tracking is initialized, this project may already 
 - `bd version` — bd must be installed. If not, stop and tell the user to install it first.
 - `git status` — must be in a git repo. If not, stop.
 - Working tree should be clean. If not, stop and ask the user what to do with uncommitted work.
+- `git remote get-url origin 2>/dev/null || echo "NO_REMOTE"` — check the remote:
+  - If the URL contains `claude-workflow`: stop immediately. Tell the user to update the remote first: `git remote set-url origin <your-repo-url>`
+  - If `NO_REMOTE`: note it — no remote is fine. The push at the end will be skipped.
+  - Otherwise: proceed normally.
 
 ---
 
@@ -227,6 +231,14 @@ For docs that don't fit the three-file system but are still useful (ARCHITECTURE
 ```bash
 git add .beads/ .claude/ docs/ CLAUDE.md PRD.md plan.MD .gitignore
 git commit -m "chore: migrate to planning docs + ADR + task workflow"
+```
+
+If Step 2 found no remote, skip the pushes and tell the user:
+> No remote configured — push manually once you've added one: `git remote add origin <url> && git push -u origin main && bd dolt push`
+
+Otherwise:
+
+```bash
 git push
 bd dolt push
 ```
