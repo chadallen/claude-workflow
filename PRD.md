@@ -1,4 +1,4 @@
-# [Project name] — Product requirements
+# [Your Product Name Here] — Product requirements
 
 ## Vision
 

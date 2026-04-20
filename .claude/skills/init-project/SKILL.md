@@ -32,13 +32,17 @@ Do not proceed until `.claude/` exists.
 
 ## Step 2: Check PRD.md exists
 
-Look for `PRD.md` or `PRD.MD` in the project root.
+Look for `PRD.md` or `PRD.MD` in the project root. 
 
 If it doesn't exist, stop:
 
 > No PRD.md found. Add your product requirements document to the project root as `PRD.md`, then run `/init-project` again. This is the only file you need to create — everything else will be built from it.
 
-If it exists, read it in full before doing anything else.
+If it the first line of `PRD.md` or `PRD.MD`says "# [Your Product Name Here] — Product requirements", stop:
+
+> Looks like you haven't updated the PRD template. Please edit `PRD.md`, replace the placeholder content with your actual product requirements, and then run `/init-project` again.
+
+If it exists and is updated from the template, read it in full before doing anything else.
 
 ---
 
@@ -107,8 +111,8 @@ Build plan.MD from the PRD's build sequence or feature roadmap:
 
 ## Overall Plan
 
-[Extract the high-level phase or milestone sequence from the PRD. 
-If the PRD has a Build Sequence section, use that. Otherwise infer from the features.]
+Extract the high-level phase or milestone sequence from the PRD. 
+If the PRD has a Build Sequence section, use that. Otherwise infer from the features]
 
 ---
 
@@ -128,7 +132,7 @@ None yet.
 
 ## Build Notes
 
-[Leave this section empty — it fills in as the project develops.]
+Leave this section empty — it fills in as the project develops.
 ```
 
 Write this to disk without needing approval — it's scaffolding, not a decision.

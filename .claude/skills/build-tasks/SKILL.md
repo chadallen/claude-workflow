@@ -1,6 +1,6 @@
 ---
 name: build-tasks
-description: Autonomously builds tasks using fresh subagents per task with comprehensive code review (tests, linting, security, performance, simplification) after each one. Resumable across sessions. Accepts an epic ID, one or more task IDs, or no argument to build the next ready task.
+description: Autonomously builds tasks using fresh subagents per task with comprehensive code review (tests, linting, security, performance, simplification) after each one. Accepts an epic ID, one or more task IDs, or no argument to build the next ready task.
 when_to_use: Use when tasks are well-specified and can be implemented without real-time judgment. Trigger phrases: "build the epic", "run the tasks", "execute autonomously", "/build-tasks".
 argument-hint: "[epic-id | task-id ...]"
 disable-model-invocation: true
@@ -16,10 +16,12 @@ Use when tasks are well-specified and can be implemented without real-time human
 
 ## Usage
 
+Should only be invoked after '/start-session' to ensure context is fresh and the agent is oriented. If the user invokes it without starting a session, instruct the user to invoke '/start-session' first. DO NOT proceed with building tasks until the user has started a session using /start-session.
+
 ```
 /build-tasks <epic-id>              # build all tasks in an epic
 /build-tasks <task-id> [<task-id>]  # build specific tasks
-/build-tasks                        # build next ready task (stops after one)
+/build-tasks                        # build the next ready task
 ```
 
 ## Step 1: Validate scope
@@ -97,6 +99,7 @@ Instructions for the subagent:
 - Implement exactly as specified in the description.
 - The `design` field contains the architectural context relevant to this task — read it carefully before writing any code.
 - If you need broader context beyond the design field (e.g., a judgment call about an architectural pattern) and the task has a parent epic, run `bd show <epic-id> --json` to read the epic's description.
+- If you REALLY NEED need broader context, you can read plan.MD and PRD.md, but try to LIMIT reading to the RELEVANT sections — you don't want to get lost in unrelated details.
 - Write tests as specified.
 - Commit frequently with the task ID in parens: `git commit -m "<message> (<task-id>)"`.
 - If any step is ambiguous or blocked, stop and report — do NOT guess.

@@ -16,9 +16,23 @@ Use this when:
 
 ---
 
+## Usage
+
+Should only be invoked after '/start-session' to ensure context is fresh and the agent is oriented. If the user invokes it without starting a session, instruct the user to invoke '/start-session' first. DO NOT proceed with building tasks until the user has started a session using /start-session.
+
+```
+/create-tasks                        # use preceding conversation to create an epic and/or tasks OR kick off a conversation to define the work and then create tasks
+```
+
+---
+
 ## Step 1: Decide structure
 
-Based on the conversation, decide whether the work needs an epic:
+Based on the conversation, decide if there is enough context to start creating tasks. 
+
+If there IS enough context already, then decide if you should to create an epic with multiple tasks, or just one task. If it's one task, create it without an epic. If it's multiple tasks that are part of a larger feature or change, group them under an epic.
+
+If there IS NOT enough context, ask the user to describe the work in more detail. The user should describe the feature or change they want to make, and you can ask follow-up questions to clarify until you have enough to create at least one task.
 
 - **Single task:** Trivial change, one file or one clear action. Skip the epic, create one task.
 - **Epic with tasks:** Multi-step work, crosses multiple files, has internal dependencies, or benefits from being tracked as a unit.
@@ -130,7 +144,15 @@ If no epic (just standalone tasks), skip this.
 
 ---
 
-## Step 6: Clean up and commit
+## Step 6: Add more tasks if needed
+
+Ask the user if they want to add another task. If yes, repeat Steps 2-5 for each new task. Add additional tasks the the proposal.md file you have already created.For additional tasks that belong to an existing epic, just create them with `--parent <epic-id>` and update the plan.MD header count.
+
+---
+
+## Step 7: Clean up and commit
+
+Make sure the user is done adding tasks. If they confirm they are done then you can proceed with this step.
 
 Delete the scratch file:
 

@@ -126,7 +126,7 @@ Scan CLAUDE.md, PRD.md, existing docs, and any ARCHITECTURE.md or DESIGN.md type
 
 Propose a batch of ADR titles — show the list, let the user approve/reject/modify. Then invoke `/adr` for each approved one.
 
-Common sources for Enzo-style projects: tech stack choices, data model decisions, authentication approach, third-party service choices, deprecated features.
+Common types of ADRs: tech stack choices, data model decisions, authentication approach, third-party service choices, deprecated features.
 
 If no ADR-worthy decisions are found, create the `docs/adr/` directory and note it's empty.
 
