@@ -1,6 +1,6 @@
 ---
 name: start-session
-description: Reads CLAUDE.md, PRD.md, plan.MD, and task state to orient the agent at the start of a coding session. Flags missing ADRs, surfaces ready tasks, and proposes a session plan for user approval.
+description: Reads CLAUDE.md, plan.MD, and task state to orient the agent at the start of a coding session. Reads PRD.md only if task context is insufficient. Flags missing ADRs, surfaces ready tasks, and proposes a session plan for user approval.
 when_to_use: Use at the beginning of every coding session. Trigger phrases: "start session", "let's get started", "pick up where we left off", "new session", "what's next", "/start-session".
 disable-model-invocation: false
 allowed-tools: Bash, Read
@@ -25,9 +25,10 @@ Run `git status` and `git log --oneline -5`.
 CLAUDE.md is already auto-loaded. Read:
 
 - **plan.MD** — Session history and active epic. Read in full.
-- **PRD.md** — Product requirements. Read in full.
 
 If plan.MD doesn't exist, stop. This project hasn't been set up for this workflow yet — suggest running `/init-project` (new project) or `/migrate-project` (existing project).
+
+Do NOT read PRD.md at this point. It will be read later only if needed (see Step 4).
 
 ## Step 3: Scan for missing ADRs
 
@@ -42,6 +43,8 @@ If `bd prime` already ran via hook, you have most of this. Otherwise run:
 - If plan.MD notes an active epic, run `bd list --parent <epic-id> --json` to see all tasks in the epic and their status
 
 If `.beads/` doesn't exist, stop. Suggest running `/migrate-project`.
+
+**Context check:** Review the ready tasks' `description` and `design` fields. If they provide enough context to understand the work, skip PRD.md. If the tasks reference product requirements, acceptance criteria, or features that aren't clear from the task fields alone, read the relevant section of PRD.md (not the whole file if you can identify the section). Only read PRD.md in full as a last resort.
 
 ## Step 5: Present the session plan
 

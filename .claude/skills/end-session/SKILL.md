@@ -1,6 +1,6 @@
 ---
 name: end-session
-description: Closes completed tasks, checks for ADR-worthy decisions, updates CLAUDE.md/PRD.md/plan.MD, commits all changes, and pushes to remote. Session is not complete until git push and bd dolt push both succeed.
+description: Closes completed tasks, checks for ADR-worthy decisions, updates CLAUDE.md and plan.MD if needed, commits all changes, and pushes to remote. Session is not complete until git push and bd dolt push both succeed.
 when_to_use: Use at the end of every coding session. Trigger phrases: "end session", "wrap up", "done for now", "let's stop here", "land the plane", "/end-session".
 disable-model-invocation: false
 allowed-tools: Bash, Read, Write
@@ -47,59 +47,27 @@ For any orphans found in server mode:
 - If `scratch.md` exists (any casing), ensure it's in `.gitignore`. Do NOT read it.
 - Don't push yet — we'll do one push at the end.
 
-## Step 4: Read project docs
+## Step 4: Update CLAUDE.md (if needed)
 
-Read CLAUDE.md, PRD.md, and plan.MD in full.
+Only update if this session changed project-level rules, conventions, tooling, or dependencies. Read CLAUDE.md only if you need to update it. If nothing changed, skip entirely.
 
-## Step 5: Update CLAUDE.md (if needed)
+Justifies an edit: new build/test command, new hard rule, new gotcha, removed/renamed something it references. Does NOT belong: progress tracking, session history, architecture decisions (→ ADR), code style (→ linter).
 
-Update only if this session changed project-level rules, conventions, tooling, or dependencies. If nothing changed, leave it alone.
+Keep under 80 lines. "Don't X, do Y" — never prohibit without an alternative.
 
-**What justifies a CLAUDE.md edit:**
-- New command Claude needs to know (added a lint step, changed the test runner)
-- New hard rule discovered (new secret, new data constraint)
-- New gotcha that will bite future sessions (add to "Things That Will Bite You" if the section exists; create one if it doesn't)
-- Removed or renamed something CLAUDE.md references
+## Step 5: Update plan.MD
 
-**What does NOT go in CLAUDE.md:**
-- Progress tracking, session history, task lists → plan.MD
-- Accumulated gotchas that are task-adjacent but not universal → plan.MD Build Notes
-- Architecture decisions → `docs/adr/`
-- Code style rules → linter config
+Read plan.MD. Update these sections:
 
-**Before adding anything, apply the cost test:**
-- Would removing this cause Claude to make a mistake? If not, don't add it.
-- Is this universally applicable to every session? If it's only relevant sometimes, put it in a skill file and reference it with `@path`.
-- Is there already a line that says something similar? Consolidate rather than duplicate.
+**Overall Plan** — Only if the plan itself changed (epic completed, new phase started).
 
-**Style rules:**
-- "Don't X, do Y" — never leave a prohibition without a concrete alternative
-- Keep the file under 80 lines. If it's creeping up, split content into skills or ADRs.
-- Reserve emphasis (IMPORTANT, YOU MUST) for 2-3 rules that truly matter
+**Current Status** — Replace the existing entry with ONE entry dated today. Be specific: features shipped, tasks closed (with IDs), decisions made. End with a **Next session:** line naming 1-2 recommended tasks by ID. Only one entry ever exists — each session overwrites the last.
 
-## Step 6: Update and prune PRD.md (if needed)
-
-Update only if product requirements or acceptance criteria changed.
-
-Prune completed specs — detailed schemas, API contracts, or layout definitions for features that are fully built and tested become dead weight once the code is the source of truth. Replace with one-line pointers to source files.
-
-If nothing changed, leave it alone.
-
-## Step 7: Update plan.MD
-
-plan.MD has three sections in the workflow:
-
-**Overall Plan** — The high-level phase/epic roadmap. Which epic is active. What's next after the current one. Update only if the plan itself changed.
-
-**Current Status** — What was accomplished this session. Be specific: features shipped, bugs fixed, decisions made, tasks closed (with IDs). Include the date. End the entry with a **Next session:** line naming the 1-2 recommended tasks by ID and title (from Step 12's ready-task check). If there are >5 ready tasks, note that too so the next session knows to address the sequencing before picking up work.
-
-**Known Issues / Blockers** — Anything unresolved that isn't already a task: blocked-on-user decisions, manual testing needed, environment issues, open design questions.
+**Known Issues / Blockers** — Add or remove as needed.
 
 plan.MD should NOT contain a "What Remains" section — that's tracked as tasks.
 
-**Prune session history.** Keep at most 3 recent entries in Current Status. Before removing older entries, check for decisions or rationale not captured elsewhere — migrate anything important to Overall Plan or Known Issues.
-
-## Step 8: Check for ADR-worthy decisions
+## Step 6: Check for ADR-worthy decisions
 
 Review what happened this session. Did any decisions meet the ADR criteria?
 
@@ -110,21 +78,11 @@ Review what happened this session. Did any decisions meet the ADR criteria?
 
 If yes, invoke `/adr` for each one — propose the title and summary, write on approval. If nothing qualifies, move on.
 
-## Step 9: Consistency check
-
-Re-read all three files. Verify:
-
-- plan.MD doesn't contradict PRD.md.
-- CLAUDE.md has no stale tool/pattern references.
-- Task state aligns with plan.MD's claimed progress.
-- plan.MD has no "What Remains" list.
-- No more than 3 session entries in Current Status.
-
-## Step 10: Commit docs
+## Step 7: Commit docs
 
 Commit: `docs: end-of-session update — <brief summary>`. Include any task IDs closed this session.
 
-## Step 11: Land the plane
+## Step 8: Land the plane
 
 **This step is non-negotiable. The session is not complete until both pushes succeed.**
 
@@ -136,7 +94,7 @@ Commit: `docs: end-of-session update — <brief summary>`. Include any task IDs 
 
 Do NOT end the session with unpushed work. Do NOT tell the user "ready to push when you are." Push it yourself.
 
-## Step 12: Session summary
+## Step 9: Session summary
 
 First, check how many tasks are currently ready:
 
