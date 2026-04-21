@@ -168,12 +168,14 @@ Agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, des
 ### Building tasks autonomously
 
 ```
-/build-tasks <epic-id>      # all tasks in an epic
-/build-tasks <task-id>      # one specific task
-/build-tasks                # next ready task
+/build-tasks                 # next ready task (will ask: run to completion or checkpoints?)
+/build-tasks --auto          # next ready task, runs to completion with no prompts
+/build-tasks --checkpoints   # next ready task, stops for review after each task
+/build-tasks <epic-id>       # all tasks in an epic
+/build-tasks <task-id>       # one specific task
 ```
 
-Fresh subagent per task, comprehensive code review after each one (tests, linting, security, performance, simplification), fixes issues, closes task, moves on. You can walk away. Resumes where it left off.
+Fresh subagent per task, comprehensive code review after each one (tests, linting, security, performance, simplification), fixes issues, closes task, moves on. Use `--auto` to walk away completely.
 
 ### Working task by task (conversational mode)
 

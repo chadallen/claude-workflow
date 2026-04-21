@@ -19,11 +19,13 @@ Use when tasks are well-specified and can be implemented without real-time human
 Should only be invoked after '/start-session' to ensure context is fresh and the agent is oriented. If the user invokes it without starting a session, instruct the user to invoke '/start-session' first. DO NOT proceed with building tasks until the user has started a session using /start-session.
 
 ```
-/build-tasks <epic-id>                    # build all tasks in an epic (asks checkpoint preference)
-/build-tasks <epic-id> --auto             # run until complete, no prompts
-/build-tasks <epic-id> --checkpoints      # stop for review after each task
-/build-tasks <task-id> [<task-id>]        # build specific tasks
-/build-tasks                              # build the next ready task
+/build-tasks                              # next ready task (asks checkpoint preference)
+/build-tasks --auto                       # next ready task, run until complete, no prompts
+/build-tasks --checkpoints               # next ready task, stop for review after each task
+/build-tasks <epic-id>                    # all tasks in an epic (asks checkpoint preference)
+/build-tasks <epic-id> --auto             # all tasks in an epic, run until complete
+/build-tasks <epic-id> --checkpoints      # all tasks in an epic, stop for review after each
+/build-tasks <task-id> [<task-id>]        # specific tasks
 ```
 
 ## Step 1: Validate scope
