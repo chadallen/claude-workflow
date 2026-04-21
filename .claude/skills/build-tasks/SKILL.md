@@ -2,7 +2,7 @@
 name: build-tasks
 description: Autonomously builds tasks using fresh subagents per task with comprehensive code review (tests, linting, security, performance, simplification) after each one. Accepts an epic ID, one or more task IDs, or no argument to build the next ready task.
 when_to_use: Use when tasks are well-specified and can be implemented without real-time judgment. Trigger phrases: "build the epic", "run the tasks", "execute autonomously", "/build-tasks".
-argument-hint: "[epic-id | task-id ...]"
+argument-hint: "[epic-id | task-id ...] [--auto | --checkpoints]"
 disable-model-invocation: false
 allowed-tools: Bash, Read
 effort: high
@@ -19,9 +19,11 @@ Use when tasks are well-specified and can be implemented without real-time human
 Should only be invoked after '/start-session' to ensure context is fresh and the agent is oriented. If the user invokes it without starting a session, instruct the user to invoke '/start-session' first. DO NOT proceed with building tasks until the user has started a session using /start-session.
 
 ```
-/build-tasks <epic-id>              # build all tasks in an epic
-/build-tasks <task-id> [<task-id>]  # build specific tasks
-/build-tasks                        # build the next ready task
+/build-tasks <epic-id>                    # build all tasks in an epic (asks checkpoint preference)
+/build-tasks <epic-id> --auto             # run until complete, no prompts
+/build-tasks <epic-id> --checkpoints      # stop for review after each task
+/build-tasks <task-id> [<task-id>]        # build specific tasks
+/build-tasks                              # build the next ready task
 ```
 
 ## Step 1: Validate scope
@@ -58,7 +60,9 @@ Show:
 - Progress: X/Y closed, Z ready, W blocked.
 - First task to execute: ID and title.
 
-Ask: "Run until complete or blocked? Or stop for review at checkpoints?" Wait for approval.
+**If `--auto` was passed:** proceed without asking. Run until complete or blocked.
+**If `--checkpoints` was passed:** proceed without asking. Stop for user review after each task closes.
+**Otherwise:** ask "Run until complete or blocked? Or stop for review at checkpoints?" Wait for approval.
 
 ## Step 3: Execution loop
 
