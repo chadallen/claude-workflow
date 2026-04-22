@@ -46,6 +46,8 @@ Report:
 
 If no test command is obvious, check package.json scripts, Makefile, or CLAUDE.md for the correct command.
 If no tests exist at all, report "No tests found" — do not fail the review solely for this, but note it.
+
+For compiled languages (Swift, Kotlin, Java, Rust, C++), check CLAUDE.md for a test-without-building equivalent. If the implementer subagent already ran a full build and tests passed in the same session, use the faster form to avoid recompilation — e.g., `xcodebuild test-without-building` for Xcode, `cargo test` with warm cache for Rust. A full rebuild in the reviewer wastes several minutes when nothing changed since the implementer ran.
 ```
 
 ### Agent 3: Linter & Static Analysis
